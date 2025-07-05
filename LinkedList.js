@@ -5,12 +5,12 @@ export default function LinkedList() {
 
   function append(value) {
     // adds a new node containing value to the end of the list
-    linkedList.push(Node());
+    linkedList.push(Node(value));
   }
 
   function prepend(value) {
     // adds a new node containing value to the start of the list
-    linkedList.unshift(Node());
+    linkedList.unshift(Node(value));
   }
 
   function size() {
@@ -46,7 +46,7 @@ export default function LinkedList() {
   function find(value) {
     // returns the index of the node containing value, or null if not found
     const index = linkedList.indexOf(value);
-    if (index != -1) {
+    if (index !== -1) {
       return index;
     }
     return null;
