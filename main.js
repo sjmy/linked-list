@@ -30,3 +30,4 @@ console.log(list.find("dog"));
 // Also, I am using existing array functions like pop, contains (name conflict?),
 // push, unshift, indexOf. Should I be constructing the functions without using
 // existing array functions?
+// YES. Don't use an array to store nodes. Create your own data structure.
