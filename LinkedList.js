@@ -76,6 +76,7 @@ export default function LinkedList() {
         const poppedNode = tailNode;
         tailNode = tmpHead;
         tailNode.nextNode = null;
+        nodeCount -= 1;
         return poppedNode;
       }
 
@@ -146,12 +147,88 @@ export default function LinkedList() {
   }
 
   // Extra credit
+
+  // Inserts a new node with the provided value at the given index
   function insertAt(value, index) {
-    // that inserts a new node with the provided value at the given index
+    if (headNode === null) {
+      throw new Error("List is empty!");
+    }
+
+    if (index > nodeCount) {
+      throw new Error("List is not that big!");
+    }
+
+    // If the index requested is the beginning of the list, we already have a function that prepends
+    if (index === 0) {
+      prepend(value);
+      return;
+    }
+
+    // If the index requested is the end of the list, we already have a function that appends
+    if (index === nodeCount) {
+      append(value);
+      return;
+    }
+
+    // tmpCount keeps track of where we are in the list
+    // currentNode and previousNode keep track of where we are and where we've been without mutating headNode
+    // When we find the index requested, create a new Node with the requested value,
+    // point the previousNode to it and newNode to the currentNode
+    let tmpCount = 0;
+    let currentNode = headNode;
+    let previousNode = null;
+
+    while (currentNode !== null) {
+      tmpCount += 1;
+      previousNode = currentNode;
+      currentNode = currentNode.nextNode;
+
+      if (tmpCount === index) {
+        const newNode = Node(value);
+        newNode.nextNode = currentNode;
+        previousNode.nextNode = newNode;
+        nodeCount += 1;
+        return;
+      }
+    }
   }
 
+  // Removes the node at the given index
   function removeAt(index) {
-    // that removes the node at the given index
+    if (headNode === null) {
+      throw new Error("List is empty!");
+    }
+
+    if (index >= nodeCount) {
+      throw new Error("List is not that big!");
+    }
+
+    // If the first node in the list is requested, point headNode to headNode.nextNode,
+    // effectively removing it from the chain
+    if (index === 0) {
+      headNode = headNode.nextNode;
+      nodeCount -= 1;
+      return;
+    }
+
+    // Same idea as insertAt()
+    // When we find the index to remove, point the previousNode to the currentNode's nextNode,
+    // effectively removing currentNode from the chain
+    let tmpCount = 0;
+    let currentNode = headNode;
+    let previousNode = null;
+
+    while (currentNode !== null) {
+      tmpCount += 1;
+      previousNode = currentNode;
+      currentNode = currentNode.nextNode;
+
+      if (tmpCount === index) {
+        previousNode.nextNode = currentNode.nextNode;
+        nodeCount -= 1;
+        return;
+      }
+    }
   }
 
   return {
@@ -165,5 +242,7 @@ export default function LinkedList() {
     contains,
     find,
     toString,
+    insertAt,
+    removeAt,
   };
 }
