@@ -1,68 +1,148 @@
 import Node from "./Node.js";
 
 export default function LinkedList() {
-  const linkedList = [];
+  let nodeCount = 0;
+  let headNode = null;
+  let tailNode = null;
 
-  function append(value) {
-    // adds a new node containing value to the end of the list
-    linkedList.push(Node(value));
-  }
+  // Adds a new node containing value to the end of the list
+  function append(value = null) {
+    if (headNode === null) {
+      prepend(value);
+    } else {
+      const newNode = Node(value);
+      let tmpHead = headNode;
 
-  function prepend(value) {
-    // adds a new node containing value to the start of the list
-    linkedList.unshift(Node(value));
-  }
+      while (tmpHead.nextNode !== null) {
+        tmpHead = tmpHead.nextNode;
+      }
 
-  function size() {
-    // returns the total number of nodes in the list
-    return linkedList.length;
-  }
-
-  function head() {
-    // returns the first node in the list
-    return linkedList[0];
-  }
-
-  function tail() {
-    // returns the last node in the list
-    return linkedList[linkedList.length - 1];
-  }
-
-  function at(index) {
-    // returns the node at the given index
-    return linkedList[index];
-  }
-
-  function pop() {
-    // removes the last element from the list
-    linkedList.pop();
-  }
-
-  function contains(value) {
-    // returns true if the passed in value is in the list and otherwise returns false
-    return linkedList.contains(value);
-  }
-
-  function find(value) {
-    // returns the index of the node containing value, or null if not found
-    const index = linkedList.indexOf(value);
-    if (index !== -1) {
-      return index;
+      nodeCount += 1;
+      tmpHead.nextNode = newNode;
+      tailNode = newNode;
     }
+  }
+
+  // Adds a new node containing value to the start of the list
+  function prepend(value = null) {
+    const newNode = Node(value);
+    newNode.nextNode = headNode;
+    headNode = newNode;
+    nodeCount += 1;
+  }
+
+  // Returns the total number of nodes in the list
+  function size() {
+    return nodeCount;
+  }
+
+  // Returns the first node in the list
+  function head() {
+    return headNode;
+  }
+
+  // Returns the last node in the list
+  function tail() {
+    return tailNode;
+  }
+
+  // Returns the node at the given index
+  function at(index) {
+    if (index === 0 || headNode === null) {
+      return headNode;
+    }
+
+    let tmpCount = 0;
+    let tmpHead = headNode;
+
+    while (tmpHead !== null) {
+      tmpCount += 1;
+      tmpHead = tmpHead.nextNode;
+
+      if (tmpCount === index) {
+        return tmpHead;
+      }
+    }
+
     return null;
   }
 
+  // Removes the last element from the list
+  function pop() {
+    let tmpHead = headNode;
+
+    while (tmpHead !== null) {
+      if (tmpHead.nextNode === tailNode) {
+        const poppedNode = tailNode;
+        tailNode = tmpHead;
+        tailNode.nextNode = null;
+        return poppedNode;
+      }
+
+      tmpHead = tmpHead.nextNode;
+    }
+  }
+
+  // Returns true if the passed in value is in the list and otherwise returns false
+  function contains(value) {
+    if (headNode.value === value) {
+      return true;
+    }
+
+    let tmpHead = headNode;
+
+    while (tmpHead !== tailNode) {
+      tmpHead = tmpHead.nextNode;
+
+      if (tmpHead.value === value) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // Returns the index of the node containing value, or null if not found
+  function find(value) {
+    if (headNode.value === value) {
+      return 0;
+    }
+
+    let tmpCount = 0;
+    let tmpHead = headNode;
+
+    while (tmpHead !== null) {
+      tmpCount += 1;
+      tmpHead = tmpHead.nextNode;
+
+      if (tmpHead.value === value) {
+        return tmpCount;
+      }
+    }
+
+    return null;
+  }
+
+  // String representation. The format should be: ( value ) -> ( value ) -> ( value ) -> null
   function toString() {
-    // represents your LinkedList objects as strings, so you can print them out and preview them in the console.
-    // The format should be: ( value ) -> ( value ) -> ( value ) -> null
     let output = "";
+    let tmpHead = headNode;
 
-    linkedList.forEach((node) => {
-      output += `( ${node.value} ) -> `;
-    });
+    if (headNode === null) {
+      output += "null";
+      return output;
+    }
 
-    output += "null";
-    return output;
+    while (tmpHead !== null) {
+      output += `( ${tmpHead.value} ) -> `;
+
+      if (tmpHead.nextNode === null) {
+        output += "null";
+        return output;
+      }
+
+      tmpHead = tmpHead.nextNode;
+    }
   }
 
   // Extra credit
